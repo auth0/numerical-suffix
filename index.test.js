@@ -1,26 +1,33 @@
-const numericalSuffix = require('./');
+const suffix = require('./index').default;
 
-describe('value-suffix tests', () => {
-  it('should return expected results', () => {
-    expect(numericalSuffix(42)).toEqual(42);
-    expect(numericalSuffix(999)).toEqual(999);
-    expect(numericalSuffix(1000)).toEqual('1.0k');
+describe('Suffixing values', () => {
+  it('does not handle negative numbers', () => {
+    expect(suffix(-10000)).toEqual(0);
+  });
 
-    expect(numericalSuffix(1234, 2)).toEqual('1.2k');
-    expect(numericalSuffix(12345, 2)).toEqual('12k');
-    expect(numericalSuffix(123456, 2)).toEqual('123k');
+  it('handles numbers with scientific notation', () => {
+    expect(suffix(1e8, 3)).toEqual('100M');
+  });
 
-    expect(numericalSuffix(1234, 3)).toEqual('1.23k');
-    expect(numericalSuffix(12345, 3)).toEqual('12.3k');
-    expect(numericalSuffix(123456, 3)).toEqual('123k');
+  it('will not suffix numbers under 1,000 by default', () => {
+    expect(suffix(0)).toEqual(0);
+    expect(suffix(10)).toEqual(10);
+    expect(suffix(999)).toEqual(999);
+  });
 
-    expect(numericalSuffix(1234, 4)).toEqual('1.234k');
-    expect(numericalSuffix(12345, 4)).toEqual('12.35k');
-    expect(numericalSuffix(123456, 4)).toEqual('123.5k');
+  it('will suffix numbers to closest metric value by default', () => {
+    expect(suffix(1000)).toEqual('1.0k');
+    expect(suffix(10001)).toEqual('10k');
+    expect(suffix(100001)).toEqual('100k');
+    expect(suffix(1000001)).toEqual('1.0M');
+  });
 
-    expect(numericalSuffix(986725)).toEqual('987k');
-    expect(numericalSuffix(986725, 4)).toEqual('986.7k');
-    expect(numericalSuffix(986725123)).toEqual('987M');
-    expect(numericalSuffix(986725123, 5)).toEqual('986.73M');
+  it('will lock point precision based on argument', () => {
+    expect(suffix(1000, 2)).toEqual('1.0k');
+    expect(suffix(100000, 4)).toEqual('100.0k');
+  });
+
+  it('will round numbers to point precision', () => {
+    expect(suffix(481516, 5)).toEqual('481.52k');
   });
 });
