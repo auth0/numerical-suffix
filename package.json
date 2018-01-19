@@ -1,5 +1,5 @@
 {
-  "name": "numerical-suffix",
+  "name": "@auth0/numerical-suffix",
   "version": "0.0.1",
   "main": "./dist/index.js",
   "author": "Auth0",
