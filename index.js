@@ -5,11 +5,18 @@
  */
 export default function numericalSuffix(number, digits = 2) {
   if (number < 0) return 0;
-  if (number < 1000) return number;
+  if (number < 100) return number;
+  if (number < 1000){
+            	  const r = number/100 ;
+                const eD = Math.ceil(Math.log(r) / Math.log(10));
+  				      const aD = digits < eD ? eD : digits;
+  				      const prN = r.toPrecision(aD);
+                return prN + 'h';
+                }
 
   const exponentTho = Math.floor(Math.log(number) / Math.log(1000));
   const cleanNum = number / Math.pow(1000, exponentTho);
-  const unit = 'kMGTPE'.charAt(exponentTho - 1);
+  const unit = 'kMGTPEZY'.charAt(exponentTho - 1);
 
   const exponentDec = Math.ceil(Math.log(cleanNum) / Math.log(10));
   const actualDigits = digits < exponentDec ? exponentDec : digits;
