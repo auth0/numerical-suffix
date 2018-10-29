@@ -9,13 +9,14 @@ describe('Suffixing values', () => {
     expect(suffix(1e8, 3)).toEqual('100M');
   });
 
-  it('will not suffix numbers under 1,000 by default', () => {
+  it('will not suffix numbers under 100 by default', () => {
     expect(suffix(0)).toEqual(0);
     expect(suffix(10)).toEqual(10);
-    expect(suffix(999)).toEqual(999);
+    expect(suffix(99)).toEqual(99);
   });
 
   it('will suffix numbers to closest metric value by default', () => {
+    expect(suffix(100)).toEqual('1.0h');
     expect(suffix(1000)).toEqual('1.0k');
     expect(suffix(10001)).toEqual('10k');
     expect(suffix(100001)).toEqual('100k');
